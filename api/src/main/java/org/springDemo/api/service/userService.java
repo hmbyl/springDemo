@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springDemo.common.config.GlobalInterceptor;
 import org.springDemo.common.config.libraryConfig;
 import org.springDemo.common.dao.xesTest;
 import org.springDemo.common.httpClient.demoClient;
@@ -48,7 +49,7 @@ public class userService {
     }
 
     public List<xesAge>getByIds(List<Integer> ids){
-
+        log.info("code {}", GlobalInterceptor.getRequestThreadLocal().get());
         QueryChainWrapper<xesAge> query = new QueryChainWrapper<>(xesAgeMapper);
         return query.eq("age",44).eq("status",1).list();
     }

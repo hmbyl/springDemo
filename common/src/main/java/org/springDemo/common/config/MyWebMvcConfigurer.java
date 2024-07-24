@@ -11,8 +11,12 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
     @Autowired
     private AuthInterceptor authInterceptor;
 
+    @Autowired
+    private GlobalInterceptor globalInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(this.authInterceptor).addPathPatterns("/getList");
+        registry.addInterceptor(this.globalInterceptor).addPathPatterns("/**");
     }
 }
