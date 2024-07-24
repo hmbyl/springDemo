@@ -6,7 +6,6 @@ import org.springDemo.api.service.userService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springDemo.common.entity.Result;
-import org.springDemo.common.dao.student;
 import org.springDemo.common.dao.xesAge;
 
 import java.util.List;
@@ -18,14 +17,6 @@ public class userController {
 
     @Autowired
     private userService service;
-
-    @RequestMapping(value = "getName",method= RequestMethod.GET,produces = "application/json" )
-    public Result<student> getName(){
-       Result<student> result=new Result<>();
-       result.setData(service.getStudent());
-       return result;
-    }
-
 
     @RequestMapping(value ="getList")
     public Result<List<xesAge>> getList(@RequestBody List<Integer> ids, @RequestHeader Map<String,String> headers) throws NotFoundException {
@@ -44,6 +35,11 @@ public class userController {
     public Result demoClient(){
         this.service.demoClient();
         return new Result<>();
+    }
+
+    @RequestMapping(value = "updateById")
+    public Integer updateById(@RequestParam Integer id){
+        return this.service.updateById(id);
     }
 
 }

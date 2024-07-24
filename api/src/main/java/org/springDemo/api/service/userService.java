@@ -1,9 +1,12 @@
 package org.springDemo.api.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springDemo.common.dao.student;
 import org.springDemo.common.config.libraryConfig;
+import org.springDemo.common.dao.xesTest;
 import org.springDemo.common.httpClient.demoClient;
 import org.springDemo.common.redis.MultiRedis;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +15,14 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springDemo.common.mapper.xesAgeMapper;
 import org.springDemo.common.dao.xesAge;
-
+import org.springframework.transaction.annotation.Transactional;
+import org.springDemo.common.mapper.xesTestMapper;
 import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
 @Service
 public class userService {
-
-    private student student;
 
     @Autowired
     private libraryConfig library;
@@ -32,14 +34,10 @@ public class userService {
     private xesAgeMapper xesAgeMapper;
 
     @Autowired
-    private demoClient demoClient;
+    private xesTestMapper xesTestMapper;
 
-    public student getStudent(){
-        student=new student();
-        student.setPassword("123");
-        student.setUsername("456");
-        return student;
-    }
+    @Autowired
+    private demoClient demoClient;
 
     public List<xesAge> getXesAgeList(){
         List<xesAge> xesAgeList;
@@ -51,8 +49,26 @@ public class userService {
 
     public List<xesAge>getByIds(List<Integer> ids){
 
-        System.out.println(this.library.getBooks());
-        return this.xesAgeMapper.selectByIds(ids);
+        QueryChainWrapper<xesAge> query = new QueryChainWrapper<>(xesAgeMapper);
+        return query.eq("age",44).eq("status",1).list();
+    }
+
+    @Transactional
+    public Integer updateById(Integer id){
+        UpdateWrapper<xesAge> xesAgeUpdateWrapper=new UpdateWrapper<>();
+        UpdateWrapper<xesTest> xesTestMapperUpdateWrapper=new UpdateWrapper<>();
+        xesAgeUpdateWrapper.eq("id",id);
+        xesAgeUpdateWrapper.set("age",111);
+        xesTestMapperUpdateWrapper.eq("id",id);
+        xesTestMapperUpdateWrapper.set("name","456");
+        this.xesTestMapper.update(xesTestMapperUpdateWrapper);
+        int res= this.xesAgeMapper.update(xesAgeUpdateWrapper);
+
+        xesTest test=this.xesTestMapper.selectById(id);
+        test.setName("777");
+        this.xesTestMapper.updateById(test);
+
+        return res;
     }
 
     public void demoClient(){
