@@ -10,7 +10,7 @@
     </parent>
     <packaging>pom</packaging>
     <groupId>org.example</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>springDemo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>demo</name>
     <description>demo</description>
