@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <packaging>pom</packaging>
-    <groupId>org.example</groupId>
+    <groupId>org</groupId>
     <artifactId>springDemo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>demo</name>
@@ -38,6 +38,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.gavlyukovskiy</groupId>
+            <artifactId>p6spy-spring-boot-starter</artifactId>
+            <version>1.9.1</version>
         </dependency>
     </dependencies>
 

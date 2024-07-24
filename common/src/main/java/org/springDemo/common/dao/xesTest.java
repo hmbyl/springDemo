@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class xesAge {
-    private int age;
+public class xesTest {
     private Integer id;
-    private int status;
+    private String name;
+    private Integer status;
 }
