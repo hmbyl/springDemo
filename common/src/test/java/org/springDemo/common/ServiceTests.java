@@ -1,55 +1,48 @@
 package org.springDemo.common;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springDemo.common.dao.xesAge;
-import org.springDemo.common.dao.xesTest;
-import org.springDemo.common.mapper.xesAgeMapper;
-import org.springDemo.common.mapper.xesTestMapper;
+import org.springDemo.common.dao.XesAge;
+import org.springDemo.common.mapper.XesAgeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
+
 @RunWith(SpringRunner.class)
-@ComponentScan(basePackages = {"org.springDemo.common"})
-@MapperScan(basePackages = {"org.springDemo.common.mapper"})
 @SpringBootTest
 @ActiveProfiles("test")
 @Slf4j
-@EnableAutoConfiguration
 public class ServiceTests {
 
     @Autowired
-    private xesTestMapper xesTestMapper;
-
-    @Autowired
-    private xesAgeMapper xesAgeWrapper;
+    private XesAgeMapper xesAgeWrapper;
 
     @Test
-    public void testXesTest(){
-        QueryWrapper<xesTest> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id",1);
-        List<xesTest> xesTestList = xesTestMapper.selectList(queryWrapper);
-        log.info("xesTestList:{}",xesTestList);
+    public void testXesAgePage_ok() {
+        LambdaQueryWrapper<XesAge> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(XesAge::getAge, 1);
+        wrapper.orderByDesc(XesAge::getId);
+        Page<XesAge> page = new Page<>(0, 2);
+        Page<XesAge> result = xesAgeWrapper.selectPage(page, wrapper);
+        log.info("result:{}", result);
+        assertNotNull(result.getRecords());
     }
 
-
     @Test
-    public void testXesAgePage(){
-        QueryWrapper<xesAge> queryWrapper = new QueryWrapper<>();
-        //queryWrapper.eq("id",1);
-        Page<xesAge> page=new Page<>(0,2);
-        page.addOrder(OrderItem.desc("id"));
-        IPage<xesAge> pageData=this.xesAgeWrapper.selectPage(page,queryWrapper);
-        log.info("pageData:{}",pageData);
+    public void testXesAgePage_withoutMapper_ok() {
+        List<Long> ids = new ArrayList<>();
+        ids.add(22L);
+        List<XesAge> result = xesAgeWrapper.selectByIds(ids);
+        log.info("result:{}", result);
+        assertNotNull(result);
     }
 }

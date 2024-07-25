@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.springDemo.common.mapper.XesAgeMapper">
+    <resultMap id="BaseResultMap" type="org.springDemo.common.dao.XesAge">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="age" column="age" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="columes">
+        id,
+        age,
+        status
+    </sql>
+
+    <select id="selectByIds" resultType="org.springDemo.common.dao.XesAge">
+        select
+        <include refid="columes"/>
+        from xes_age
+        where id in
+        <foreach item="item" index="index" collection="list"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>
