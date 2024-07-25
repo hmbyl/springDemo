@@ -11,10 +11,14 @@ spring:
     p6spy:
       # 日志格式
       log-format: "\ntime:%(executionTime) || sql:%(sql)\n"
-
   config:
     activate:
       on-profile: test
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 1
 mybatis-plus:
   mapper-locations: ["org.springDemo*:/mapper/**/*.xml"]
 
