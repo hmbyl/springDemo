@@ -16,8 +16,8 @@ spring:
     activate:
       on-profile: test
 mybatis-plus:
-  mapper-locations: ["org.springDemo*:/mapper/**/*.xml"]
-
+  configuration-properties:
+    tableXesAge: xes_age
 library:
   location: 湖北武汉加油中国加油
   books:

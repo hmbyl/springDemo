@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springDemo.common.mapper.xesAgeMapper;
 import org.springDemo.common.dao.xesAge;
@@ -21,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springDemo.common.mapper.xesTestMapper;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -61,12 +61,10 @@ public class UserService {
         log.info("code {}", GlobalInterceptor.getRequestThreadLocal().get());
         QueryChainWrapper<xesAge> query = new QueryChainWrapper<>(xesAgeMapper);
         this.asyncService.asyncPrint();
-        log.info("aysnc add:{}",this.asyncService.asyncAdd(2,5));
+        log.info("aysnc add:{}",this.asyncService.asyncAdd(2,5,3));
         log.info("redis value :{}",this.stringRedisTemplate.opsForValue().get("k1"));
-        return query.eq("age",44).eq("status",1).list();
+        return this.xesAgeMapper.selectByIds(ids);
     }
-
-
 
     @Transactional
     public Integer updateById(Integer id){

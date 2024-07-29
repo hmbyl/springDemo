@@ -32,7 +32,7 @@ public class AsyncService {
 
     }
 
-    public Integer asyncAdd(Integer num1, Integer num2) {
+    public Integer asyncAdd(Integer num1, Integer num2,Integer num3) {
         CompletableFuture<Integer> f1 = CompletableFuture.supplyAsync(() ->{
             try {
                 TimeUnit.SECONDS.sleep(5);
@@ -49,7 +49,16 @@ public class AsyncService {
                 throw new RuntimeException(e);
             }
         });
-        CompletableFuture<Integer> result=f1.thenCombine(f2, Integer::sum);
-        return result.join();
+        CompletableFuture<Integer> f3 = CompletableFuture.supplyAsync(() ->{
+            try {
+                TimeUnit.SECONDS.sleep(5);
+                return num3+10;
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        CompletableFuture<Void> allFutures = CompletableFuture.allOf(f1, f2, f3);
+        allFutures.join();
+        return f1.join()+f2.join()+f3.join();
     }
 }
